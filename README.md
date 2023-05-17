@@ -52,12 +52,65 @@ There's a lot of bean defs, one for every bean instance that gets created by the
 At the highest level we have the `BeanFactory` interface which gives us the bean instances using those bean defs.
 And we have the `BeanDefinitionRegistry` interface which lets us register bean defs. 
 
-There are many implementations of the bean factory, but in the framework where two interfaces come together are the 
+`BeanFactory` is part of the spring beans jar and provides the foundational components for the spring IoC container.
+
+There are many implementations of the `BeanFactory`, but in the framework where two interfaces come together are the 
 `DefaultListableBeanFactory`. `DefaultListableBeanFactory` implements both the `BeanFactory` and `BeanDefinitionRegistry` interfaces. 
 
 `DefaultListableBeanFactory` forms the heart of spring, manages bean defs and bean instances. 
 
 ![alt text](images/bean-factory-registry.png "Title")
+
+## Application Context
+`ApplicationContext` is an implementation of `BeanFactory` and it provides some additional functionality on top of the `BeanFactory`.
+Some of the additional functionality that `ApplicationContext` provides are - 
+- ApplicationEvent Publishing
+- Environment abstraction
+- MessageSource
+- Configuration classes and Scanning
+
+### Hierarchy of `ApplicationContext`
+
+![alt text](images/app-context-hierarchy.png "Title")
+
+`AbstractApplicationContext` is the base implementation that can detect special beans. These special beans can include 
+post-processors such as: 
+- BeanPostProcessor
+- BeanFactoryPostProcessors
+
+`GenericApplicationContext` contains a `DefaultListableBeanFactory`.
+
+`AnnotationConfigApplicationContext` adds the configuration support and support for scanning. 
+
+![alt text](images/app-context-bean-def.png "Title")
+
+`@Configuration` annotation is meta annotated with `@Component` which means it also gets picked up by component scanning. 
+When configuration classes are picked up by component scanning, they are scanned for bean methods. 
+And when a bean method is found a bean, a bean definition is created for it. 
+
+The bean definition on the figure above is:
+
+```java
+type=HelloMessageProvider
+factoryBean="ApplicationConfiguration"
+factoryMethodName="messageProvider"
+```
+The bean definition comes from the method signature and not from what gets returned from the method body. 
+
+### Bean instance create flow
+
+![alt text](images/bean-instance-create-flow.png "Title")
+
+This is how `AnnotationConfigApplicationContext` can register and get beans. 
+
+### Process the configuration classes
+`AnnotationConfigApplicationContext` uses `ConfigurationClassPostProcessor` to procerss the configuration classes. 
+The concept of post-processors is quite prevalent throughout the spring framework. 
+
+![alt text](images/post-processor.png "Title")
+
+When the `ConfigurationClassPostProcessor` finds the beans that are defined in the configuration class
+it creates bean definitions and registers them because it implements the bean definition registry.
 
 
 
