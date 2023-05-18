@@ -2,8 +2,14 @@
 
 _Note: This document is prepared completely based on [this video](https://www.youtube.com/watch?v=LeoCh7VK9cg&t=1379s)_
 
+- Inversion of Control and Dependency Injection
 - How **Spring** works behind the scene?
 - How does **Spring** create and manage all the bean instances?
+
+## Inversion of Control and Dependency Injection
+#### Ref:
+- https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring
+
 
 ## `@EnableAutoConfiguration` Annotation
 
